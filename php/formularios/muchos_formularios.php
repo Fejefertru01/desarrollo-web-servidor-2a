@@ -11,7 +11,7 @@
 <body>
     <form action="" method="post">
         <fieldset>
-            <legend>Potencia</legend>
+            <legend><b>Potencia</b></legend>
             <label>Base</label>
             <br>
             <input type="text" required name="base">
@@ -33,9 +33,10 @@
             ?>
         </fieldset>
     </form>
+    <br>
     <form action="" method="post">
         <fieldset>
-            <legend>Maximo 3 numeros</legend>
+            <legend><b>Maximo 3 numeros</b></legend>
             <label for="">Numero 1</label>
             <input type="number" name="num1">
             <br>
@@ -44,7 +45,7 @@
             <br>
             <label for="">Numero 3</label>
             <input type="number" name="num3">
-            <br>
+            <br><br>
             <input type="hidden" name="action" value="maximo3">
             <input type="submit" value="Calcular">
             <?php
@@ -59,11 +60,12 @@
             ?>
         </fieldset>
     </form>
+    <br>
     <form action="" method="post">
         <fieldset>
-            <legend>Primos</legend>
+            <legend><b>Primos</b></legend>
             <input type="number" name="numero">
-            <br>
+            <br><br>
             <input type="hidden" name="action" value="primos">
             <input type="submit" value="Calcular">
             <?php
@@ -80,30 +82,60 @@
             ?>
         </fieldset>
     </form>
+    <br>
     <form action="" method="post">
         <fieldset>
-            <legend>Temperaturas</legend>
-            <label>Temperatura </label>
+            <legend><b>Temperatura</b></legend>
+            <input type="number" name="numero" min="0">
             <br>
-            <input type="number" required name="temperatura">
-            <br><br>
-            <label>Medida original</label>
+            <div id="contenedorTemperatura">
+                <div id="u1">
+                    <fieldset>
+                        <legend>Temperatura original</legend>
+                    <input type="radio" name="u1" value="F">
+                    <label for="">Fahrenheit</label>
+                    <br>
+                    <input type="radio" name="u1" value="C">
+                    <label for="">Celsius</label>
+                    <br>
+                    <input type="radio" name="u1" value="K">
+                    <label for="">Kelvin</label>
+                    </fieldset>
+                    <br>
+                </div>
+                <div id="u2">
+                    <fieldset>
+                        <legend>Temperatura a transformar</legend>
+                    <input type="radio" name="u2" value="F">
+                    <label for="">Fahrenheit</label>
+                    <br>
+                    <input type="radio" name="u2" value="C">
+                    <label for="">Celsius</label>
+                    <br>
+                    <input type="radio" name="u2" value="K">
+                    <label for="">Kelvin</label>
+                    <br>
+                    </fieldset>
+                </div>
+            </div>
             <br>
-            <input type="text" required name="original">
-            <br><br>
-            <label>Medida a transformar</label>
-            <br>
-            <input type="text" required name="transformar">
-            <br><br>
-            <input type="hidden" name="action" value="temperaturas">
-            <input type="submit" value="Calcular">
+            <input type="hidden" name="action" value="temperatura">
+            <input type="submit" value="Transformar">
             <?php
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                if ($_POST["action"] == "temperaturas") {
-                    $temp = (float)$_POST["temperatura"];
-                    $temp_ori = $_POST["original"];
-                    $temp_trans = $_POST["transformar"];
-                    echo "<h4>" . transformarTemp($temp, $temp_ori, $temp_trans) . "</h4>";
+                if ($_POST["action"] == "temperatura") {
+                    if (isset($_POST["u1"]) && isset($_POST["u2"])) {
+                        $numero = (float)$_POST["numero"];
+                        if (!empty($numero)) {
+                            $u1 = $_POST["u1"];
+                            $u2 = $_POST["u2"];
+                            echo "<h3>" . transformarTemp($numero, $u1, $u2) . "</h3>";
+                        } else {
+                            echo "<h3>Pon numero</h3>";
+                        }
+                    }
+                } else {
+                    echo "<h3>elige unidad</h3>";
                 }
             }
             ?>
