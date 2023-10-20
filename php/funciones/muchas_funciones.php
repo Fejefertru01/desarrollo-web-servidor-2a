@@ -53,7 +53,7 @@
     }
 
 
-    
+
     function maximo_3(int $primerNum, int $segundoNum, int $tercerNum): string
     {
         if ($primerNum == $segundoNum && $primerNum == $tercerNum) {
