@@ -91,6 +91,17 @@
             <input type="text" name="apellido"><?php if (isset($err_apellido)) echo $err_apellido ?><br><br>
             <input type="submit" value="Registrarse"><br><br>
             <?php
+            /*if (isset($temp_usuario) && isset($temp_nombre) && isset($temp_apellido) && isset($temp_fecha)) {
+                echo "Usuario: " . $temp_usuario;
+                echo "<br><br>";
+                echo "Nombre: " . $temp_nombre;
+                echo "<br><br>";
+                echo "Apellido: " . $temp_apellido;
+                echo "<br><br>";
+                echo "Fecha de nacimiento: " . $temp_fecha;
+                echo "<br><br>";
+            }*/
+
             if (preg_match($patron, $temp_usuario)) {
                 $usuario = $temp_usuario;
                 echo "Usuario: " . $usuario;
