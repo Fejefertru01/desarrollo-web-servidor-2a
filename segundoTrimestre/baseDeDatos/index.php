@@ -18,19 +18,19 @@
                     <input type="text" class="form-control" name="titulo">
                 </div>
                 <div class="col-4">
-                    <label>Ordenar por:</label>
+                    <label>Filtrar:</label>
                     <select name="campo">
                         <option value="titulo">Titulo</option>
                         <option value="distribuidora">Distribuidora</option>
                         <option value="precio">Precio</option>
                     </select>
-                    <label>Precio</label>
                     <select name="orden">
                         <option value="asc">Ascendente</option>
                         <option value="desc">Descendente</option>
                     </select>
                 </div>
                 <div class="col-2">
+                    <input type="hidden" name="action" value="filtrar">
                     <input type="submit" value="Buscar" class="btn btn-primary">
                 </div>
             </div>
@@ -45,26 +45,39 @@
             </thead>
             <tbody>
                 <?php
-                if($_SERVER["REQUEST_METHOD"]=="POST"){
-                    $titulo=$_POST["titulo"];
-                    $campo=$_POST["campo"];
-                    $orden=$_POST["orden"];
-                    $stml = $conexion->prepare("Select * from videojuegos where titulo LIKE CONCAT('%',?,'%') order by $campo $orden");
-                    $stml->bind_param("s",$titulo);
-                    
-                }else if($_SERVER["REQUEST_METHOD"]=="GET"){
-                $stml = $conexion->prepare("Select * from videojuegos");
-                }
-                $stml->execute();
-                $result = $stml->get_result();
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row["titulo"] . "</td>";
-                    echo "<td>" . $row["distribuidora"] . "</td>";
-                    echo "<td>" . $row["precio"] . "</td>";
-                    echo "</tr>";
+                    if($_SERVER["REQUEST_METHOD"]=="POST" && $_POST["action"] == "filtrar"){
+                        $titulo=$_POST["titulo"];
+                        $campo=$_POST["campo"];
+                        $orden=$_POST["orden"];
+                        $stml = $conexion->prepare("Select * from videojuegos where titulo LIKE CONCAT('%',?,'%') order by $campo $orden");
+                        $stml->bind_param("s",$titulo);
+                    }else if($_SERVER["REQUEST_METHOD"]=="GET" || $_POST["action"] == "editar"){
+                        $stml = $conexion->prepare("Select * from videojuegos");
+                    }
+                        $stml->execute();
+                        $result = $stml->get_result();
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $row["titulo"] . "</td>";
+                            echo "<td>" . $row["distribuidora"] . "</td>";
+                            echo "<td>" . $row["precio"] . "</td>";
+                    ?>
+                    <td><form action='view_videogame.php' method='get'>
+                    <input type='hidden' name='titulo' value="<?php echo $row["titulo"]?>">
+                    <input class='btn btn-secondary' type='submit' value='Ver'>
+                </form>
+                    </td>
+                    <td>
+                        <form action="delete_videogame.php" method="get">
+                            <input type="hidden" name="borrar" value="<?php echo $row["titulo"]?>">
+                            <input type="submit" value="borrar" class='btn btn-warning'>
+                        </form>
+                    </td>
+                    </tr>
+                    <?php
                 }
                 $conexion -> close();
+            
                 ?>
             </tbody>
         </table>
